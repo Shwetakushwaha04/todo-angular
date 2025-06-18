@@ -1,0 +1,11 @@
+<div>
+  {{ todo.todo }}
+  <button (click)="onDelete()">Delete</button>
+</div><div class="card mb-2">
+  <div class="card-body">
+    <h5 class="card-title">{{ todo.todo }}</h5>
+    <p class="card-text">{{ todo.desc }}</p>
+    <button class="btn btn-sm btn-danger" (click)="onDelete()">Delete</button>
+  </div>
+</div>
+
