@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <h2>My Todos</h2>
+  <app-add-todo (todoAdd)="addTodo($event)"></app-add-todo>
+
+  <h5 class="mt-5">Your Todos</h5>
+  @if(todos.length === 0){
+  <div>No Todos to display</div>
+  }
+  <!-- <div *ngFor="let todo of todos">
+    <app-todo-item [todo]="todo" (todoDelete)="deleteTodo($event)"></app-todo-item>
+  </div> -->
+  @for (todo of todos; track todo.sno) {
+  <div>
+    <app-todo-item [todo]="todo" (todoDelete)="deleteTodo($event)"></app-todo-item>
+  </div>
+  }
+</div>
