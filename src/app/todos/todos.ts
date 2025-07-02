@@ -5,6 +5,8 @@ import { Todo, User } from '../types';
 import { AddTodoComponent } from "../components/add-todo/add-todo";
 import { TodoItemComponent } from '../components/todo-item/todo-item';
 
+import { TodoService } from '../services/todo.service';
+
 
 @Component({
   selector: 'app-todos',
@@ -16,21 +18,24 @@ import { TodoItemComponent } from '../components/todo-item/todo-item';
 export class TodosComponent implements OnInit {
   todos: Todo[] = [];
 
-  constructor() {}
+  constructor(private todoService: TodoService) {}
 
   ngOnInit(): void {
-    let todosString = localStorage.getItem("todos");
-    this.todos = todosString ? JSON.parse(todosString) : [];
+    // this.todoService.getTodos().subscribe(todos => {
+    //   this.todos = todos
+    // });
+    this.todoService.getTodos().subscribe({
+      next: (todos) => {
+        this.todos = todos
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    });
   }
-
-  // addTodo(todo: Todo): void {
-  //   this.todos.push(todo);
-  //   localStorage.setItem("todos", JSON.stringify(this.todos));
-  // }
 
   addTodo = (todo: Todo) => {
     this.todos.push(todo);
-    localStorage.setItem("todos", JSON.stringify(this.todos));
   }
 
   deleteTodo(todo: Todo): void {

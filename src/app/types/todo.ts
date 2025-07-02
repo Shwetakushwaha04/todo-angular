@@ -13,10 +13,12 @@
 //   }
 // }
 
-export interface Todo {
-  sno: number;
+export interface TodoIn {
   title: string;
   desc: string;
+}
+
+export interface Todo extends TodoIn {
+  sno: number;
   active: boolean;
-  todo: any;
 }
