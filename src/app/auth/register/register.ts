@@ -1,36 +1,39 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule, RouterModule],
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrls: ['./register.css']
 })
 export class RegisterComponent {
-  email = '';
-  password = '';
-  confirmPassword = '';
-  errorMsg = '';
+  registerForm: FormGroup;
+  registrationFailed = '';
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+    this.registerForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+  }
 
   onRegister() {
-    if (this.password !== this.confirmPassword) {
-      this.errorMsg = 'Passwords do not match';
-      return;
-    }
+    if (this.registerForm.invalid) return;
 
-    const success = this.auth.register(this.email, this.password);
+    const { email, password } = this.registerForm.value;
+    const success = this.auth.register(email, password);
+
     if (success) {
-      alert("Registered successfully!");
+      localStorage.setItem('isRegistered', 'true');
       this.router.navigate(['/login']);
     } else {
-      this.errorMsg = 'Email already registered';
+      this.registrationFailed = 'Registration failed. Try again.';
     }
   }
 }
+

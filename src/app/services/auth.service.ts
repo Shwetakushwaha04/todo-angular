@@ -1,34 +1,42 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  login(email: string, password: string): boolean {
-    const usersJSON = localStorage.getItem('users');
-    const users = usersJSON ? JSON.parse(usersJSON) : [];
+  private apiUrl = 'http://localhost:8000';  // Change if different
 
-    const user = users.find((u: any) => u.email === email && u.password === password);
-    return !!user;
+  constructor(private http: HttpClient) {}
+
+  // REGISTER
+  register(email: string, password: string): Observable<boolean> {
+    const payload = { email, password };
+    return this.http.post(`${this.apiUrl}/register`, payload).pipe(
+      map(() => true),
+      catchError(() => of(false))
+    );
   }
 
-  register(email: string, password: string): boolean {
-    const usersJSON = localStorage.getItem('users');
-    const users = usersJSON ? JSON.parse(usersJSON) : [];
-
-    const userExists = users.some((u: any) => u.email === email);
-    if (userExists) return false;
-
-    users.push({ email, password });
-    localStorage.setItem('users', JSON.stringify(users));
-    return true;
+  // LOGIN
+  login(email: string, password: string): Observable<boolean> {
+    const payload = { email, password };
+    return this.http.post(`${this.apiUrl}/login`, payload).pipe(
+      map((res: any) => {
+        localStorage.setItem('token', res.token);
+        return true;
+      }),
+      catchError(() => of(false))
+    );
   }
 
-  logout(): void {
-    localStorage.removeItem('isLoggedIn');
+  logout() {
+    localStorage.removeItem('token');
   }
 
-  isLoggedIn(): boolean {
-    return localStorage.getItem('isLoggedIn') === 'true';
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
   }
 }
