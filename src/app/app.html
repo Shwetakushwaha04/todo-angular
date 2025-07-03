@@ -1,23 +1,39 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Todo List</a>
+    <a class="navbar-brand" routerLink="/">
+      <i class="bi bi-check2-square"></i> Todo List
+    </a>
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
       data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
+        <!-- Home -->
         <li class="nav-item">
-          <a class="nav-link active" routerLink="/">Home</a>
+          <a class="nav-link" routerLink="/" routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">Home</a>
         </li>
+
+        <!-- Todo List -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/todos">Lists</a>
+          <a class="nav-link" routerLink="/todos" routerLinkActive="active">Lists</a>
+        </li>
+
+        <!-- Register -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
+        </li>
+
+        <!-- Login -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
-
-<!-- <app-todos></app-todos> -->
 <router-outlet></router-outlet>

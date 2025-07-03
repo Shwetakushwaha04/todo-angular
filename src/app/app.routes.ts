@@ -1,11 +1,22 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { TodosComponent } from './todos/todos';
-import { Unauthorized } from './error/unauthorized/unauthorized';
+import { LoginComponent } from './auth/login/login';
+import { RegisterComponent } from './auth/register/register';
+import { ErrorComponent } from './error/error';
 
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: "login",
+    pathMatch: 'full'
+  },
+  // {
+  //   path: '**',
+  //   component: ErrorComponent
+  // },
+  {
+    path: 'home',
     component: HomeComponent
   },
   {
@@ -13,7 +24,11 @@ export const routes: Routes = [
     component: TodosComponent
   },
   {
-    path: 'error/401',
-    component: Unauthorized
+    path: 'login',
+    component: LoginComponent
   },
+  {
+    path: 'register',
+    component: RegisterComponent
+  }
 ];
