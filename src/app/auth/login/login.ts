@@ -18,8 +18,8 @@ export class LoginComponent {
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      email: ['user@mail.com', [Validators.required, Validators.email]],
+      password: ['asdfsdfsdfd', Validators.required]
     });
   }
 
@@ -28,14 +28,22 @@ export class LoginComponent {
       return;
     }
 
-    const { email, password } = this.loginForm.value;
-    const success = this.auth.login(email, password);
+    //TODO: Auth through auth service
+    localStorage.setItem("token", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyM0BtYWlsLmNvbSIsIm5hbWUiOiJVc2VyIFRocmVlIiwiZXhwIjoxNzUxNjIwMjQyfQ.dv2VhT6uMYYdTl0dIIBZ_4VDYrPzxNGbn_JDsnojAFw');
+    this.auth.initSession();
+    this.router.navigate(['/home']);
 
-    if (success) {
-      localStorage.setItem('isLoggedIn', 'true');
-      this.router.navigate(['/home']);
-    } else {
-      this.loginFailed = 'Invalid email or password';
-    }
+    // const { email, password } = this.loginForm.value;
+    // const success = this.auth.login(email, password);
+
+    // console.log(success)
+
+    // if (success) {
+    //   localStorage.setItem('isLoggedIn', 'true');
+    //   localStorage.setItem("token", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyM0BtYWlsLmNvbSIsIm5hbWUiOiJVc2VyIFRocmVlIiwiZXhwIjoxNzUxNjIwMjQyfQ.dv2VhT6uMYYdTl0dIIBZ_4VDYrPzxNGbn_JDsnojAFw');
+    //   this.router.navigate(['/home']);
+    // } else {
+    //   this.loginFailed = 'Invalid email or password';
+    // }
   }
 }

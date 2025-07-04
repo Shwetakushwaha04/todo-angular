@@ -5,6 +5,8 @@ import { LoginComponent } from './auth/login/login';
 import { RegisterComponent } from './auth/register/register';
 import { ErrorComponent } from './error/error';
 
+import { authGuard, logGuard } from './guards/auth.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -17,18 +19,31 @@ export const routes: Routes = [
   // },
   {
     path: 'home',
+    canActivate: [authGuard],
     component: HomeComponent
   },
   {
     path: 'todos',
+    canActivate: [authGuard],
     component: TodosComponent
   },
   {
     path: 'login',
+    canActivate: [logGuard],
     component: LoginComponent
   },
   {
     path: 'register',
+    canActivate: [logGuard],
     component: RegisterComponent
+  },
+  {
+    path: 'error',
+    children: [
+      {
+        path: '404',
+        component: ErrorComponent
+      }
+    ]
   }
 ];
