@@ -4,17 +4,17 @@
       <i class="bi bi-check2-square"></i> Todo List
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-      data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-      aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
+        @if (authService.isAuthenticated()) {
         <!-- Home -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active"
+          <a class="nav-link" routerLink="/home" routerLinkActive="active"
             [routerLinkActiveOptions]="{ exact: true }">Home</a>
         </li>
 
@@ -22,7 +22,18 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/todos" routerLinkActive="active">Lists</a>
         </li>
-
+        
+        <li class="nav-item cursor-pointer">
+          <a class="nav-link" routerLink="/profile" routerLinkActive="active">
+            {{authService.getUser()}}
+          </a>
+        </li>
+        <li class="nav-item cursor-pointer">
+          <a class="nav-link" (click)="logout()">
+            Log Out
+          </a>
+        </li>
+        } @else {
         <!-- Register -->
         <li class="nav-item">
           <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
@@ -32,6 +43,7 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
         </li>
+        }
       </ul>
     </div>
   </div>
