@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -18,24 +18,28 @@ export class LoginComponent {
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      email: new FormControl ('', [Validators.required, Validators.email]),
+      password:new FormControl ('', [Validators.required])
     });
   }
 
   onLogin() {
     if (this.loginForm.invalid) {
-      return;
-    }
-
     const { email, password } = this.loginForm.value;
-    const success = this.auth.login(email, password);
 
-    if (success) {
-      localStorage.setItem('isLoggedIn', 'true');
-      this.router.navigate(['/home']);
-    } else {
-      this.loginFailed = 'Invalid email or password';
-    }
+    this.auth.login({email, password}).subscribe({
+      next: (success: boolean) =>{
+         if (success) {
+          localStorage.setItem('isLoggedIn', 'true');
+          this.router.navigate(['/home']);
+        } else {
+          this.loginFailed = 'Login Failed.';
+        }
+      },
+      error:(err) =>{
+        this.loginFailed = 'Invalid email or password';
+      }
+    });
+   }
   }
 }

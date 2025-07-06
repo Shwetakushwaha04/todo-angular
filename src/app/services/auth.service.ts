@@ -12,8 +12,8 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   // REGISTER
-  register(email: string, password: string): Observable<boolean> {
-    const payload = { email, password };
+  register(data:{email: string, password: string}): Observable<boolean> {
+    const payload = { email:data.email, password:data.password };
     return this.http.post(`${this.apiUrl}/register`, payload).pipe(
       map(() => true),
       catchError(() => of(false))
@@ -21,8 +21,8 @@ export class AuthService {
   }
 
   // LOGIN
-  login(email: string, password: string): Observable<boolean> {
-    const payload = { email, password };
+  login(data:{email: string, password: string}): Observable<boolean> {
+    const payload = { email:data.email, password:data.password };
     return this.http.post(`${this.apiUrl}/login`, payload).pipe(
       map((res: any) => {
         localStorage.setItem('token', res.token);

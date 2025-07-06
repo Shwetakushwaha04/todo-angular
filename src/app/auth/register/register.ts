@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
@@ -17,23 +17,28 @@ export class RegisterComponent {
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      email: new FormControl ('', [Validators.required, Validators.email]),
+      password:new FormControl ('', [Validators.required])
     });
   }
 
   onRegister() {
-    if (this.registerForm.invalid) return;
-
+    if (this.registerForm.invalid) {
     const { email, password } = this.registerForm.value;
-    const success = this.auth.register(email, password);
 
-    if (success) {
-      localStorage.setItem('isRegistered', 'true');
-      this.router.navigate(['/login']);
-    } else {
+    this.auth.register({email, password}).subscribe({
+      next:(success: boolean) =>{
+        if (success) {
+          localStorage.setItem('isRegistered', 'true');
+          this.router.navigate(['/login']);
+        } else {
       this.registrationFailed = 'Registration failed. Try again.';
-    }
+        }
+      }
+    });
+   }
   }
 }
+
+
 
