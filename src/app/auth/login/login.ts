@@ -18,28 +18,32 @@ export class LoginComponent {
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
-      email: new FormControl ('', [Validators.required, Validators.email]),
-      password:new FormControl ('', [Validators.required])
+      email: new FormControl('user3@mail.com', [Validators.required, Validators.email]),
+      password: new FormControl('password', [Validators.required])
     });
   }
 
   onLogin() {
-    if (this.loginForm.invalid) {
-    const { email, password } = this.loginForm.value;
+    console.log('one')
+    if (this.loginForm.valid) {
+      const { email, password } = this.loginForm.value;
 
-    this.auth.login({email, password}).subscribe({
-      next: (success: boolean) =>{
-         if (success) {
-          localStorage.setItem('isLoggedIn', 'true');
-          this.router.navigate(['/home']);
-        } else {
-          this.loginFailed = 'Login Failed.';
+      this.auth.login({ email, password }).subscribe({
+        next: (success: boolean) => {
+          if (success) {
+            localStorage.setItem('isLoggedIn', 'true');
+            this.router.navigate(['/home']);
+          } else {
+            this.loginFailed = 'Login Failed.';
+          }
+        },
+        error: (err) => {
+          this.loginFailed = 'Invalid email or password';
         }
-      },
-      error:(err) =>{
-        this.loginFailed = 'Invalid email or password';
-      }
-    });
-   }
+      });
+    }
+    else {
+      alert('validation error')
+    }
   }
 }

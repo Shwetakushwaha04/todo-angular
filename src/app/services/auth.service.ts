@@ -22,6 +22,7 @@ export class AuthService {
 
   // LOGIN
   login(data:{email: string, password: string}): Observable<boolean> {
+    console.log('two')
     const payload = { email:data.email, password:data.password };
     return this.http.post(`${this.apiUrl}/login`, payload).pipe(
       map((res: any) => {
